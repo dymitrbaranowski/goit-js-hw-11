@@ -9,60 +9,53 @@ const gallery = document.querySelector('.gallery');
 const btnLoadMore = document.querySelector('.load-more');
 let gallerySimpleLightbox = new SimpleLightbox('.gallery a');
 
-// const { height: cardHeight } = document
-//   .querySelector('.gallery')
-//   .firstElementChild.getBoundingClientRect();
-
-// window.scrollBy({
-//   top: cardHeight * 2,
-
-//   behavior: 'smooth',
-// });
 
 btnLoadMore.style.display = 'none';
 
 let pageNumber = 1;
 
-btnSearch.addEventListener('click', e => {
+btnSearch.addEventListener('click', async e => {
   e.preventDefault();
   cleanGallery();
   const trimmedValue = input.value.trim();
-  if (trimmedValue !== '') {
-    fetchImages(trimmedValue, pageNumber).then(foundData => {
-      if (foundData.hits.length === 0) {
+    if (!trimmedValue) {
+        return;
+     }
+      
+      const {hits, totalHits}= fetchImages(trimmedValue, pageNumber);
+      if (hits.length === 0) {
         Notiflix.Notify.failure(
           'Sorry, there are no images matching your search query. Please try again.'
         );
       } else {
-        renderImageList(foundData.hits);
+        renderImageList(hits);
         Notiflix.Notify.success(
-          `Hooray! We found ${foundData.totalHits} images.`
+          `Hooray! We found ${totalHits} images.`
         );
         btnLoadMore.style.display = 'block';
         gallerySimpleLightbox.refresh();
       }
-    });
-  }
+    
 });
 
-btnLoadMore.addEventListener('click', () => {
+btnLoadMore.addEventListener('click', async () => {
   pageNumber++;
   const trimmedValue = input.value.trim();
   btnLoadMore.style.display = 'none';
-  fetchImages(trimmedValue, pageNumber).then(foundData => {
+    const { hits, totalHits } = fetchImages(trimmedValue, pageNumber);
     if (foundData.hits.length === 0) {
       Notiflix.Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
       );
     } else {
-      renderImageList(foundData.hits);
+      renderImageList(hits);
       Notiflix.Notify.success(
-        `Hooray! We found ${foundData.totalHits} images.`
+        `Hooray! We found ${totalHits} images.`
       );
       btnLoadMore.style.display = 'block';
     }
   });
-});
+
 
 function renderImageList(images) {
   console.log(images, 'images');
