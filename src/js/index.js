@@ -21,8 +21,8 @@ btnSearch.addEventListener('click', async e => {
     if (!trimmedValue) {
         return;
      }
-      
-      const {hits, totalHits}= fetchImages(trimmedValue, pageNumber);
+  try {
+         const {hits, totalHits}= fetchImages(trimmedValue, pageNumber);
       if (hits.length === 0) {
         Notiflix.Notify.failure(
           'Sorry, there are no images matching your search query. Please try again.'
@@ -36,6 +36,10 @@ btnSearch.addEventListener('click', async e => {
         gallerySimpleLightbox.refresh();
       }
     
+  } catch (e) {
+    console.log(e);
+     }
+    
 });
 
 btnLoadMore.addEventListener('click', async () => {
@@ -43,7 +47,7 @@ btnLoadMore.addEventListener('click', async () => {
   const trimmedValue = input.value.trim();
   btnLoadMore.style.display = 'none';
     const { hits, totalHits } = fetchImages(trimmedValue, pageNumber);
-    if (foundData.hits.length === 0) {
+    if (hits.length === 0) {
       Notiflix.Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
       );
