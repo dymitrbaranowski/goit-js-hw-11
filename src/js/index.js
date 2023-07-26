@@ -46,6 +46,7 @@ btnLoadMore.addEventListener('click', async () => {
   pageNumber++;
   const trimmedValue = input.value.trim();
   btnLoadMore.style.display = 'none';
+  try {
     const { hits, totalHits } = fetchImages(trimmedValue, pageNumber);
     if (hits.length === 0) {
       Notiflix.Notify.failure(
@@ -58,6 +59,10 @@ btnLoadMore.addEventListener('click', async () => {
       );
       btnLoadMore.style.display = 'block';
     }
+  } catch (err) {
+    console.log(err);
+  }
+    
   });
 
 
