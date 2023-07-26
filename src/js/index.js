@@ -46,22 +46,20 @@ btnLoadMore.addEventListener('click', async () => {
   pageNumber++;
   const trimmedValue = input.value.trim();
   btnLoadMore.style.display = 'none';
-  try {
-    const { hits, totalHits } = await fetchImages(trimmedValue, pageNumber);
+  
+    const { hits, totalHits } =  fetchImages(trimmedValue, pageNumber);
     if (hits.length === 0) {
       Notiflix.Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
       );
     } else {
-      await renderImageList(hits);
+       renderImageList(hits);
       Notiflix.Notify.success(
         `Hooray! We found ${totalHits} images.`
       );
       btnLoadMore.style.display = 'block';
     }
-  } catch (err) {
-    console.log(err);
-  }
+ 
     
   });
 
