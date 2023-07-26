@@ -47,12 +47,16 @@ btnLoadMore.addEventListener('click', async () => {
   const trimmedValue = input.value.trim();
   btnLoadMore.style.display = 'none';
   
-    const { hits, totalHits } =  fetchImages(trimmedValue, pageNumber);
+    const { hits, totalHits } = await fetchImages(trimmedValue, pageNumber);
     if (hits.length === 0) {
       Notiflix.Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
       );
-    } else {
+    } else if (hits.length === totalHits.length) {
+        btnLoadMore.style.hidden = true;
+    }
+    
+    else {
        renderImageList(hits);
       Notiflix.Notify.success(
         `Hooray! We found ${totalHits} images.`
