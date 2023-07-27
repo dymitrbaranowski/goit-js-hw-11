@@ -52,18 +52,14 @@ btnLoadMore.addEventListener('click', async () => {
       Notiflix.Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
       );
-    } else if (Math.floor([...totalHits / 40 ]) === pageNumber) {
+    } else if (Math.ceil((totalHits / 40)) === pageNumber) {
       btnLoadMore.style.display = 'none';
-       return Notiflix.Notify.info(
-         "We're sorry, but you've reached the end of search results."
-       );
-    }
-    
-    else {
-       renderImageList(hits);
-      Notiflix.Notify.success(
-        `Hooray! We found ${totalHits} images.`
+      return Notiflix.Notify.info(
+        "We're sorry, but you've reached the end of search results."
       );
+    } else {
+      renderImageList(hits);
+      Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
       btnLoadMore.style.display = 'block';
     }
  
@@ -72,36 +68,37 @@ btnLoadMore.addEventListener('click', async () => {
 
 
 function renderImageList(images) {
-  console.log(images, 'images');
+  // console.log(images, 'images');
   const markup = images
     .map(image => {
-      console.log('img', image);
+      // console.log('img', image);
+      const {id, largeImageURL, webformatURL, tags, likes, views, comments, downloads } = image;
       return `<div class="photo-card">
 
-       <a href="${image.largeImageURL}"><img class="photo" src="${image.webformatURL}" alt="${image.tags}" title="${image.tags}" loading="lazy"/></a>
+       <a href="${largeImageURL}"><img class="photo" src="${webformatURL}" alt="${tags}" title="${tags}" loading="lazy"/></a>
 
         <div class="info">
            <p class="info-item">
-    <b>Likes</b> <span class="info-item-api"> ${image.likes} </span>
+    <b>Likes</b> <span class="info-item-api"> ${likes} </span>
 </p>
             <p class="info-item">
-                <b>Views</b> <span class="info-item-api">${image.views}</span>  
+                <b>Views</b> <span class="info-item-api">${views}</span>  
             </p>
             <p class="info-item">
-                <b>Comments</b> <span class="info-item-api">${image.comments}</span>  
+                <b>Comments</b> <span class="info-item-api">${comments}</span>  
             </p>
             <p class="info-item">
-                <b>Downloads</b> <span class="info-item-api">${image.downloads}</span> 
+                <b>Downloads</b> <span class="info-item-api">${downloads}</span> 
             </p>
         </div>
     </div>`;
     })
     .join('');
-  gallery.innerHTML  += markup;
-   
+  // gallery.innerHTML  += markup;
+gallery.insertAdjacentHTML('beforeend', markup); 
 }
 
-gallery.insertAdjacentHTML('beforeend', renderImageList()) 
+
 
 
 function cleanGallery() {
