@@ -29,14 +29,15 @@ formSearch.addEventListener('submit', async e => {
         );
         return
       }
-      else if (Math.ceil(totalHits / 40) === pageNumber) {
-         renderImageList(hits);
-    btnLoadMore.style.display = 'none';
-    return Notiflix.Notify.info(
-      "We're sorry, but you've reached the end of search results."
-    );
+  //     else if (Math.ceil(totalHits / 40) === pageNumber) {
+  //        renderImageList(hits);
+  //   btnLoadMore.style.display = 'none';
+  //   return Notiflix.Notify.info(
+  //     "We're sorry, but you've reached the end of search results."
+  //   );
   
-  } else {
+  // }
+   else {
         renderImageList(hits);
         Notiflix.Notify.success(
           `Hooray! We found ${totalHits} images.`
@@ -44,7 +45,11 @@ formSearch.addEventListener('submit', async e => {
         btnLoadMore.style.display = 'block';
         gallerySimpleLightbox.refresh();
       }
-    
+    if (hits.length > 1 || hits.length < 40) {
+      btnLoadMore.style.display = 'none';
+      Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
+
+    }
   } catch (e) {
     console.error(e);
      }
