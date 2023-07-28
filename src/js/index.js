@@ -4,7 +4,7 @@ import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const input = document.querySelector('.search-form-input');
-const btnSearch = document.querySelector('.search-form-button');
+const formSearch = document.querySelector('.search-form');
 const gallery = document.querySelector('.gallery');
 const btnLoadMore = document.querySelector('.load-more');
 let gallerySimpleLightbox = new SimpleLightbox('.gallery a');
@@ -14,7 +14,7 @@ btnLoadMore.style.display = 'none';
 
 let pageNumber = 1;
 
-btnSearch.addEventListener('click', async e => {
+formSearch.addEventListener('submit', async e => {
   e.preventDefault();
   cleanGallery();
   const trimmedValue = input.value.trim();
@@ -47,24 +47,24 @@ btnLoadMore.addEventListener('click', async () => {
   const trimmedValue = input.value.trim();
   btnLoadMore.style.display = 'none';
   
-    const { hits, totalHits } = await fetchImages(trimmedValue, pageNumber);
-    if (hits.length === 0) {
-      Notiflix.Notify.failure(
-        'Sorry, there are no images matching your search query. Please try again.'
-      );
-    } else if (Math.ceil((totalHits / 40)) === pageNumber) {
-      btnLoadMore.style.display = 'none';
-      return Notiflix.Notify.info(
-        "We're sorry, but you've reached the end of search results."
-      );
-    } else {
-      renderImageList(hits);
-      Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
-      btnLoadMore.style.display = 'block';
-    }
- 
-    
-  });
+  const { hits, totalHits } = await fetchImages(trimmedValue, pageNumber);
+  if (hits.length === 0) {
+    Notiflix.Notify.failure(
+      'Sorry, there are no images matching your search query. Please try again.'
+    );
+    return
+  }
+  renderImageList(hits);
+  btnLoadMore.style.display = 'block';
+  
+  if (Math.ceil(totalHits / 40) === pageNumber && (Math.ceil(totalHits / 40) < 40)) {
+    btnLoadMore.style.display = 'none';
+    return Notiflix.Notify.info(
+      "We're sorry, but you've reached the end of search results."
+    );
+  
+  }
+});
 
 
 function renderImageList(images) {
