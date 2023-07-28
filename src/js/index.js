@@ -27,7 +27,16 @@ formSearch.addEventListener('submit', async e => {
         Notiflix.Notify.failure(
           'Sorry, there are no images matching your search query. Please try again.'
         );
-      } else {
+        return
+      }
+      else if (Math.ceil(totalHits / 40) === pageNumber) {
+         renderImageList(hits);
+    btnLoadMore.style.display = 'none';
+    return Notiflix.Notify.info(
+      "We're sorry, but you've reached the end of search results."
+    );
+  
+  } else {
         renderImageList(hits);
         Notiflix.Notify.success(
           `Hooray! We found ${totalHits} images.`
@@ -57,7 +66,7 @@ btnLoadMore.addEventListener('click', async () => {
   renderImageList(hits);
   btnLoadMore.style.display = 'block';
   
-  if (Math.ceil(totalHits / 40) === pageNumber || FormData.value < 40) {
+  if (Math.ceil(totalHits / 40) === pageNumber) {
     btnLoadMore.style.display = 'none';
     return Notiflix.Notify.info(
       "We're sorry, but you've reached the end of search results."
