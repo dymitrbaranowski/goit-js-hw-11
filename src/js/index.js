@@ -57,7 +57,7 @@ btnLoadMore.addEventListener('click', async () => {
   renderImageList(hits);
   btnLoadMore.style.display = 'block';
   
-  if (Math.ceil(totalHits / 40) === pageNumber && (Math.ceil(totalHits / 40) < 40)) {
+  if (Math.ceil(totalHits / 40) === pageNumber || FormData.value < 40) {
     btnLoadMore.style.display = 'none';
     return Notiflix.Notify.info(
       "We're sorry, but you've reached the end of search results."
@@ -72,7 +72,7 @@ function renderImageList(images) {
   const markup = images
     .map(image => {
       // console.log('img', image);
-      const {id, largeImageURL, webformatURL, tags, likes, views, comments, downloads } = image;
+      const {largeImageURL, webformatURL, tags, likes, views, comments, downloads } = image;
       return `<div class="photo-card">
 
        <a href="${largeImageURL}"><img class="photo" src="${webformatURL}" alt="${tags}" title="${tags}" loading="lazy"/></a>
